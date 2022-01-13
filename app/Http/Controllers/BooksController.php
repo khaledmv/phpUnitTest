@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BooksController extends Controller
 {
@@ -35,10 +36,14 @@ class BooksController extends Controller
      */
     public function store(Request $request)
     {
-        $book = new Book;
-        $book->title = $request->title;
-        $book->author = $request->author;
-        $book->save();
+
+        $data = $request->validate([
+            'title' => 'required',
+            'author' => 'required',
+        ]);
+
+
+        DB::table('books')->insert($data);
     }
 
     /**
@@ -72,7 +77,13 @@ class BooksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'title' => 'required',
+            'author' => 'required',
+        ]);
+
+
+        DB::table('books')->where('id', $id)->update($data);
     }
 
     /**
